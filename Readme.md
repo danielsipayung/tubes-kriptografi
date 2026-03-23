@@ -7,3 +7,5 @@ Program ini dibuat oleh:
 |18223031      |Daniel A. M. Sipayung|
 |18223068      |Muhammad Arya Putra Prihastono|
 |18223082      |Mahesa Satria Prayata|
+
+Icons by Icons8

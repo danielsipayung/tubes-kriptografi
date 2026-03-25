@@ -1,5 +1,6 @@
 import tkinter as tk
 from gui.change_page import change_page
+from utils.file_handler import File_handler
 
 class Transmitter(tk.Frame):
     def __init__(self, container, handler):
@@ -7,6 +8,8 @@ class Transmitter(tk.Frame):
 
         self.handler = handler
         self.next_page = None
+
+        path = File_handler()
         
         # FRAME 1
         frame1 = tk.Frame(self, bg='#D9D9D9')
@@ -22,17 +25,35 @@ class Transmitter(tk.Frame):
 
         # FRAME 2
         frame2 = tk.Frame(self, bg='#D9D9D9')
-        label2 = tk.Label(frame2, text= 'Transmitter', font=("Arial", 20, "bold"), justify='left', bg='#D9D9D9')
+        label2 = tk.Label(frame2, text= 'Transmitter', font=("Arial", 20, "bold"), bg='#D9D9D9')
 
-        label2.pack(anchor='w')
+        label2.pack(anchor='w',side='top')
         frame2.pack(fill='both', pady= 8, padx=(20,0))
 
         # FRAME 3
-        frame3 = tk.Frame(self)
-        label3 = tk.Label(frame3, text= ' ', background='#792A2A', anchor='w')
+        frame3 = tk.Frame(self, bg="#FFFFFF")
 
-        label3.pack(fill='both', ipady= 80)
-        frame3.pack(fill='both')
+        #   # 3a
+        frame3a = tk.Frame(frame3, bg="#FF0808")
+        label3a = tk.Label(frame3a, text= 'Cover Video', font=("Arial", 16, "bold"), bg='#FF0808', pady=6)
+        label3a.pack(fill='both')
+        button3b = tk.Button(frame3a, text= 'Select file', font=("Arial", 10, "bold"), 
+                             bg='#006989', pady=6, relief=tk.FLAT, command=path.open_file)
+        button3b.pack(ipadx= 10)
+
+        #   # 3b
+        frame3b = tk.Frame(frame3, bg="#0008FF")
+        label3b = tk.Label(frame3b, text= 'Secret Message', font=("Arial", 16, "bold"), bg='#0008FF', pady=6)
+        label3b.pack(fill='both')
+
+        frame3c = tk.Frame(frame3, bg="#FBFF2C")
+        label3c = tk.Label(frame3c, text= 'Stego Video', font=("Arial", 16, "bold"), bg='#FBFF2C', pady=6)
+        label3c.pack(fill='both')
+
+        frame3.pack(fill='both', ipady= 60)
+        frame3a.pack(side='left',fill='both', expand=True)
+        frame3b.pack(side='left',fill='both', expand=True)
+        frame3c.pack(side='left',fill='both', expand=True)
     
         # FRAME 4
         frame4 = tk.Frame(self, bg='#D9D9D9')

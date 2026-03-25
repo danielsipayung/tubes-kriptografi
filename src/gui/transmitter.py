@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from gui.change_page import change_page
 
 class Transmitter(tk.Frame):
@@ -9,15 +8,17 @@ class Transmitter(tk.Frame):
         self.handler = handler
         self.next_page = None
         
-        frame1 = ttk.Frame(self)
-        embed_button = tk.Button(frame1, text= 'EMBED_button', fg='white', bg='#35915B')
-        extract_button = tk.Button(frame1, text= 'EXTRACT', fg='white', bg='#D58B1B', 
+        frame1 = tk.Frame(self)
+        embed_button = tk.Button(frame1, text= 'EMBED', fg='white', bg='#35915B', 
+                                    width=13, font=("Arial", 10, "bold"), relief=tk.FLAT)
+        extract_button = tk.Button(frame1, text= 'EXTRACT', fg='white', bg='#D58B1B',
+                                    width=13, font=("Arial", 10, "bold"), relief=tk.FLAT,
                                    command=lambda: self.handler.change_page(self, self.next_page))
 
-        label3 = ttk.Label(self, text= 'Transmitter', background='blue')
+        label3 = tk.Label(self, text= 'Transmitter', background='blue')
 
-        frame1.pack(fill='both', pady= 5)
-        embed_button.pack(side='left', ipady=6, ipadx= 7)
+        frame1.pack(fill='both', pady= 10)
+        embed_button.pack(side='left', ipady=6, ipadx= 7, padx= 10)
         extract_button.pack(side='left', ipady=6, ipadx= 7)
 
         label3.pack(fill='both', expand=True)

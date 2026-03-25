@@ -3,25 +3,81 @@ from gui.change_page import change_page
 
 class Transmitter(tk.Frame):
     def __init__(self, container, handler):
-        super().__init__(container)
+        super().__init__(container, bg='#D9D9D9')
 
         self.handler = handler
         self.next_page = None
         
-        frame1 = tk.Frame(self)
+        # FRAME 1
+        frame1 = tk.Frame(self, bg='#D9D9D9')
         embed_button = tk.Button(frame1, text= 'EMBED', fg='white', bg='#35915B', 
                                     width=13, font=("Arial", 10, "bold"), relief=tk.FLAT)
         extract_button = tk.Button(frame1, text= 'EXTRACT', fg='white', bg='#D58B1B',
                                     width=13, font=("Arial", 10, "bold"), relief=tk.FLAT,
                                    command=lambda: self.handler.change_page(self, self.next_page))
 
-        label3 = tk.Label(self, text= 'Transmitter', background='blue')
-
         frame1.pack(fill='both', pady= 10)
         embed_button.pack(side='left', ipady=6, ipadx= 7, padx= 10)
         extract_button.pack(side='left', ipady=6, ipadx= 7)
 
-        label3.pack(fill='both', expand=True)
+        # FRAME 2
+        frame2 = tk.Frame(self, bg='#D9D9D9')
+        label2 = tk.Label(frame2, text= 'Transmitter', font=("Arial", 20, "bold"), justify='left', bg='#D9D9D9')
+
+        label2.pack(anchor='w')
+        frame2.pack(fill='both', pady= 8, padx=(20,0))
+
+        # FRAME 3
+        frame3 = tk.Frame(self)
+        label3 = tk.Label(frame3, text= ' ', background='#792A2A', anchor='w')
+
+        label3.pack(fill='both', ipady= 80)
+        frame3.pack(fill='both')
     
+        # FRAME 4
+        frame4 = tk.Frame(self, bg='#D9D9D9')
+        label4 = tk.Label(frame4, text= 'Use encryption', font=("Arial", 12), justify='left', bg='#D9D9D9')
+        label4a = tk.Label(frame4, text= 'yes', font=("Arial", 12, "bold"), justify='left', bg='#D9D9D9')
+
+        frame4.pack(fill='both', pady= 10, padx=(17,0))
+        label4.pack(anchor='w', side='left')
+        label4a.pack(anchor='w', side='left')
+
+        # FRAME 5
+        frame5 = tk.Frame(self, bg='#D9D9D9')
+        label5 = tk.Label(frame5, text= 'A5/1 key', font=("Arial", 12), justify='left', bg='#D9D9D9')
+        label5a = tk.Label(frame5, text= ' ', font=("Arial", 12), justify='left', bg='#ACACAC')
+
+        frame5.pack(fill='both', pady= 0, padx=(17,0))
+        label5.pack(anchor='w', side='top')
+        label5a.pack(anchor='w', side='top', expand=True, fill='x', ipady= 5, padx=(0,17))
+
+        # FRAME 6
+        frame6 = tk.Frame(self, bg='#D9D9D9')
+        label6 = tk.Label(frame6, text= 'Insertion method', font=("Arial", 12), justify='left', bg='#D9D9D9')
+        label6a = tk.Label(frame6, text= 'sequential', font=("Arial", 12, "bold" ), justify='left', bg='#D9D9D9')
+
+        frame6.pack(fill='both', pady= 14, padx=(17,0))
+        label6.pack(anchor='w', side='left')
+        label6a.pack(anchor='w', side='left')
+
+        # FRAME 7
+        frame7 = tk.Frame(self, bg='#D9D9D9')
+        label7 = tk.Label(frame7, text= 'Stego key', font=("Arial", 12), justify='left', bg='#D9D9D9')
+        label7a = tk.Label(frame7, text= ' ', font=("Arial", 12), justify='left', bg='#ACACAC')
+
+        frame7.pack(fill='both', pady= 0, padx=(17,0))
+        label7.pack(anchor='w', side='top')
+        label7a.pack(anchor='w', side='top', expand=True, fill='x', ipady= 5, padx=(0,17))
+
+        # FRAME 8
+        frame8 = tk.Frame(self, bg='#D9D9D9')
+        Embed_message_button = tk.Button(self, text='Embed Message', font=("Arial", 12, "bold"), 
+                                         bg='#947A1D', fg='white', relief=tk.FLAT)
+
+        frame8.pack(fill='both', pady= 10)
+        Embed_message_button.pack(side='top', ipady=6, ipadx= 80, padx= 10)
+
+
     def set_next_page(self, page):
         self.next_page = page

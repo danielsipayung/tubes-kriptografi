@@ -13,13 +13,13 @@ class App(tk.Tk):
         self.title("Steganografi LSB")
 
         #icon window
-        self.main_background_color = '#d4d2d2'
+        self.main_background_color = "#D9D9D9"
         self.icon = tk.PhotoImage(file='assets/icon.png')
         self.iconphoto(True,self.icon)
         self.config(background=self.main_background_color)
 
         #container
-        container = tk.Frame(self)
+        container = tk.Frame(self,background=self.main_background_color)
         container.pack(expand=True, fill="both")
 
         #handler

@@ -3,7 +3,7 @@ from gui.change_page import change_page
 
 class Receiver(tk.Frame):
     def __init__(self, container, handler):
-        super().__init__(container)
+        super().__init__(container, bg='#D9D9D9')
 
         self.handler = handler
         self.next_page = None

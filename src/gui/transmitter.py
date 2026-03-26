@@ -28,29 +28,42 @@ class Transmitter(tk.Frame):
         label2 = tk.Label(frame2, text= 'Transmitter', font=("Arial", 20, "bold"), bg='#D9D9D9')
 
         label2.pack(anchor='w',side='top')
-        frame2.pack(fill='both', pady= 8, padx=(20,0))
+        frame2.pack(fill='both', pady= 8, padx=(10,0))
 
         # FRAME 3
         frame3 = tk.Frame(self, bg="#FFFFFF")
 
         #   # 3a
         frame3a = tk.Frame(frame3, bg="#FF0808")
-        label3a = tk.Label(frame3a, text= 'Cover Video', font=("Arial", 16, "bold"), bg='#FF0808', pady=6)
+        label3a = tk.Label(frame3a, text= 'Cover Video', font=("Arial", 16, "bold"), bg='#FF0808', fg='white')
         label3a.pack(fill='both')
-        button3b = tk.Button(frame3a, text= 'Select file', font=("Arial", 10, "bold"), 
-                             bg='#006989', pady=6, relief=tk.FLAT, command=path.open_file)
-        button3b.pack(ipadx= 10)
+        label3a1 = tk.Label(frame3a, text= 'Video', font=("Arial", 16, "bold"), bg="#000000", pady=6)
+        label3a1.pack(fill='both', ipady=40)
+        button3a = tk.Button(frame3a, text= 'Select file', font=("Arial", 10, "bold"), fg='white', 
+                             bg='#006989', pady=3, relief=tk.FLAT, command=path.open_file)
+        button3a.pack(ipadx= 10, pady= 5)
 
         #   # 3b
         frame3b = tk.Frame(frame3, bg="#0008FF")
-        label3b = tk.Label(frame3b, text= 'Secret Message', font=("Arial", 16, "bold"), bg='#0008FF', pady=6)
+        label3b = tk.Label(frame3b, text= 'Secret Message', font=("Arial", 16, "bold"), bg='#0008FF', fg='white')
         label3b.pack(fill='both')
+        label3b1 = tk.Label(frame3b, text= 'Video', font=("Arial", 16, "bold"), bg="#000000", pady=6)
+        label3b1.pack(fill='both', ipady=40)
+        button3b = tk.Button(frame3b, text= 'Select file', font=("Arial", 10, "bold"), fg='white', 
+                             bg='#006989', pady=3, relief=tk.FLAT, command=path.open_file)
+        button3b.pack(ipadx= 10, pady= 5)
 
-        frame3c = tk.Frame(frame3, bg="#FBFF2C")
-        label3c = tk.Label(frame3c, text= 'Stego Video', font=("Arial", 16, "bold"), bg='#FBFF2C', pady=6)
+        #   # 3c
+        frame3c = tk.Frame(frame3, bg="#B9BB11")
+        label3c = tk.Label(frame3c, text= 'Stego Video', font=("Arial", 16, "bold"), bg="#B9BB11", fg='white')
         label3c.pack(fill='both')
+        label3c1 = tk.Label(frame3c, text= 'Video', font=("Arial", 16, "bold"), bg="#000000", pady=6)
+        label3c1.pack(fill='both', ipady=40)
+        button3c = tk.Button(frame3c, text= 'save', font=("Arial", 10, "bold"), fg='white', 
+                             bg='#111111', pady=3, relief=tk.FLAT, command=path.save_file)
+        button3c.pack(ipadx= 10, pady= 5)
 
-        frame3.pack(fill='both', ipady= 60)
+        frame3.pack(fill='both', ipady= 0)
         frame3a.pack(side='left',fill='both', expand=True)
         frame3b.pack(side='left',fill='both', expand=True)
         frame3c.pack(side='left',fill='both', expand=True)

@@ -6,6 +6,8 @@ import random
 
 from text_file_binary import binary_to_file, binary_to_text, file_to_binary, text_to_binary
 
+default_delimiter = "[##MADOKA##]"
+
 def split_byte_332(byte_string):
     r_bits = byte_string[0:3]
     g_bits = byte_string[3:6]
@@ -27,7 +29,7 @@ def split_byte_332(byte_string):
 # else:    
 #     print("split failed")
 
-def generate_header(input_data, is_file, is_random):
+def generate_header(input_data, is_file, is_random, delimiter=default_delimiter):
     if is_random:
         embed_process = "random"
     else:
@@ -58,7 +60,6 @@ def generate_header(input_data, is_file, is_random):
     }
     
     header_json_string = json.dumps(header_dict)
-    delimiter = "[##MADOKA##]"
     full_header_string = header_json_string + delimiter
     binary_header = ''.join(format(ord(char), '08b') for char in full_header_string)
     final_binary_string = binary_header + binary_data
@@ -70,7 +71,7 @@ def generate_header(input_data, is_file, is_random):
 # header_preview = binary_to_text(test[:1500])
 # print(f"Header Preview: {header_preview}")
 
-# if "[##MADOKA##]" in header_preview:
+# if default_delimiter in header_preview:
 #     print("header generated")
 # else:
 #     print("header failed")
@@ -154,26 +155,6 @@ def embed_secret(final_binary_string, frames_folder, frame_order, mode="sequenti
     else:
         print("embed done")
 
-# test frame order and embedding
-# while True:
-#     test_folder_name = input("frame folder name: ")
-#     test_frames_path = os.path.join("avi_frames", test_folder_name)
-
-#     frame_order = get_frame_order(test_frames_path, sensitivity=30)
-#     # print(f"frame order: {frame_order}")
-
-#     embed_mode = input("(seq/ran): ").lower()
-
-#     if embed_mode == "seq":
-#         test_seq = generate_header("madoka seq", is_file=False, is_random=False)
-#         embed_secret(test_seq, test_frames_path, frame_order, mode="sequential")
-#     elif embed_mode == "ran":
-#         print(f"Using 'homura' as stego-key")
-#         test_rand = generate_header("madoka rand", is_file=False, is_random=True)
-#         embed_secret(test_rand, test_frames_path, frame_order, mode="random", stego_key="homura")
-#     else:
-#         print("Invalid.")
-
 def read_byte_332(b, g, r):
     r_bits = format(r & 7, '03b')
     g_bits = format(g & 7, '03b')
@@ -181,7 +162,7 @@ def read_byte_332(b, g, r):
 
     return r_bits + g_bits + b_bits
 
-def extract_secret(frames_folder, frame_order, mode="sequential", stego_key=None):
+def extract_secret(frames_folder, frame_order, mode="sequential", stego_key=None, delimiter=default_delimiter):
     header_string = ""
     header_found = False
     header_dict = {}
@@ -223,10 +204,10 @@ def extract_secret(frames_folder, frame_order, mode="sequential", stego_key=None
                     char = chr(int(char_bits, 2))
                     header_string += char
 
-                    if "[##MADOKA##]" in header_string:
+                    if delimiter in header_string:
                         header_found = True
                         
-                        json_str = header_string.split("[##MADOKA##]")[0]
+                        json_str = header_string.split(delimiter)[0]
                         header_dict = json.loads(json_str)
         
                         binary_length_target = header_dict["file_size"]
@@ -249,16 +230,17 @@ while True:
     test_folder_name = input("\nEnter frame folder name (in avi_frames/): ")
     test_frames_path = os.path.join("avi_frames", test_folder_name)
     frame_order = get_frame_order(test_frames_path, sensitivity=30.0)
+    # print(f"frame order: {frame_order}")
 
     action = input("embed/extract? (e/x): ").lower()
 
     if action == 'e':
-        payload_type = input("Embed text or file? (t/f): ").lower()
+        secret_type = input("Embed text or file? (t/f): ").lower()
         
-        if payload_type == 't':
+        if secret_type == 't':
             data_to_embed = input("Enter secret: ")
             is_file = False
-        elif payload_type == 'f':
+        elif secret_type == 'f':
             filename = input("Enter filename (in input/ folder): ")
             data_to_embed = os.path.join("input", filename)
             is_file = True

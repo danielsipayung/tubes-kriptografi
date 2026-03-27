@@ -53,14 +53,14 @@ def binary_to_file(binary_data, output_file_path):
 #         filepath = "input/" + input("Enter file name with extension: ")
 #         binary_output = file_to_binary(filepath)
         
-#         txt_filepath = "binary_output/" + input("Enter name for the output text file: ") + ".txt"
+#         txt_filepath = "binary_output/" + input("Enter the output file name with .txt: ")
         
 #         with open(txt_filepath, 'w') as text_file:
 #             text_file.write(binary_output)
             
 #         print(f"Binary saved to {txt_filepath}")
 #     elif option == '2':
-#         txt_filepath = "binary_output/" + input("Enter the text file name: ") + ".txt"
+#         txt_filepath = "binary_output/" + input("Enter the text file name with .txt: ")
         
 #         with open(txt_filepath, 'r') as text_file:
 #             binary_input = text_file.read()

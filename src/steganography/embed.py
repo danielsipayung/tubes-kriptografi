@@ -35,8 +35,12 @@ def generate_header(input_data, is_file=True, is_random=False):
 
     if is_file:
         file_type = "file"
-        filename = os.path.basename(input_data)
-        _, extension = os.path.splitext(filename)
+        filename = input_data.split('/')[-1]
+        if "." in filename:
+            extension = "." + filename.split('.')[-1]
+        else:
+            extension = ""
+            
         binary_data = file_to_binary(input_data)
     else:
         file_type = "text"

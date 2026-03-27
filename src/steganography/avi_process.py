@@ -68,20 +68,15 @@ def rebuild_video(frames_folder, output_video_path, fps):
 
 #     if option == '1':
 #         video_path = "avi_video/" + input("Enter avi video file name: ")
-        
 #         folder_name = input("Enter the folder name where frames are kept (inside /avi_frames): ")
         
 #         if os.path.exists(video_path):
 #             fps = extract_frames(video_path, folder_name)
 #         else:
 #             print(f"Error: Could not find {video_path}")
-
 #     elif option == '2':
 #         folder_name = input("Enter the frame folder name inside /avi_frames to rebuild from: ")
-        
 #         output_path = "output/" + input("Enter output video name (saves in /output): ")
-        
 #         rebuild_video(folder_name, output_path, fps)
-
 #     else:
 #         print("Invalid option.")

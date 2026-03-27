@@ -59,7 +59,6 @@ def binary_to_file(binary_data, output_file_path):
 #             text_file.write(binary_output)
             
 #         print(f"Binary saved to {txt_filepath}")
-
 #     elif option == '2':
 #         txt_filepath = "binary_output/" + input("Enter the text file name: ") + ".txt"
         
@@ -70,6 +69,5 @@ def binary_to_file(binary_data, output_file_path):
         
 #         binary_to_file(binary_input, filepath)
 #         print(f"File saved to {filepath}")
-
 #     else:
 #         print("Invalid option.")

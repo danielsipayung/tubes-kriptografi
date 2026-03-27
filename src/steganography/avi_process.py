@@ -2,7 +2,7 @@ import cv2
 import os
 
 def extract_frames(video_path, frames_folder):
-    frame_folder_path = "avi_frames/" + frames_folder
+    frame_folder_path = os.path.join("avi_frames", frames_folder)
     
     if not os.path.exists(frame_folder_path):
         os.makedirs(frame_folder_path)
@@ -17,7 +17,7 @@ def extract_frames(video_path, frames_folder):
         if not read_was_successful:
             break
             
-        frame_filename = frame_folder_path + f"/frame_{frame_count:04d}.bmp"
+        frame_filename = os.path.join(frame_folder_path, f"frame_{frame_count:04d}.bmp")
         cv2.imwrite(frame_filename, frame)
         frame_count += 1
 
@@ -29,7 +29,7 @@ def extract_frames(video_path, frames_folder):
     return fps
 
 def rebuild_video(frames_folder, output_video_path, fps):
-    frame_folder_path = "avi_frames/" + frames_folder
+    frame_folder_path = os.path.join("avi_frames", frames_folder)
     
     if not os.path.exists(frame_folder_path):
         print(f"Error: Folder '{frame_folder_path}' does not exist.")
@@ -60,6 +60,7 @@ def rebuild_video(frames_folder, output_video_path, fps):
 
 # test avi handling
 # fps = 23.732 # fps test.avi
+# fps = 30 # fps random.avi
 
 # while True:
 #     print("1. Extract frames from AVI")
@@ -67,7 +68,7 @@ def rebuild_video(frames_folder, output_video_path, fps):
 #     option = input("Choose an option: ")
 
 #     if option == '1':
-#         video_path = "avi_video/" + input("Enter avi video file name: ")
+#         video_path = os.path.join("avi_video", input("Enter avi video file name: "))
 #         folder_name = input("Enter the folder name where frames are kept (inside /avi_frames): ")
         
 #         if os.path.exists(video_path):
@@ -76,7 +77,7 @@ def rebuild_video(frames_folder, output_video_path, fps):
 #             print(f"Error: Could not find {video_path}")
 #     elif option == '2':
 #         folder_name = input("Enter the frame folder name inside /avi_frames to rebuild from: ")
-#         output_path = "output/" + input("Enter output video name (saves in /output): ")
+#         output_path = os.path.join("output", input("Enter output video name (saves in /output): "))
 #         rebuild_video(folder_name, output_path, fps)
 #     else:
 #         print("Invalid option.")

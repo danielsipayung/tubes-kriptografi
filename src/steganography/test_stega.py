@@ -22,11 +22,12 @@ while True:
     option = input("Choose: ")
 
     if option == '1':
-        video_path = os.path.join("avi_video", input("Enter avi video file name (e.g. test.avi): "))
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        video_path = os.path.join(current_dir,"avi_video", input("Enter avi video file name (e.g. test.avi): "))
         folder_name = input("Enter target folder name (will be created in /avi_frames): ")
         
         if os.path.exists(video_path):
-            current_fps = extract_frames(video_path, folder_name)
+            current_fps = extract_frames(current_dir,video_path, folder_name)
         else:
             print(f"Error: Could not find {video_path}")
 

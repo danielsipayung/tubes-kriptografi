@@ -1,8 +1,8 @@
 import cv2
 import os
 
-def extract_frames(video_path, frames_folder):
-    frame_folder_path = os.path.join("avi_frames", frames_folder)
+def extract_frames(base,video_path, frames_folder):
+    frame_folder_path = os.path.join(base,"avi_frames", frames_folder)
     
     if not os.path.exists(frame_folder_path):
         os.makedirs(frame_folder_path)

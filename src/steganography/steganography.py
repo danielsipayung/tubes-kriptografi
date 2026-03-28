@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import random
 
-from text_file_binary import binary_to_file, binary_to_text, file_to_binary, text_to_binary
+from steganography.text_file_binary import binary_to_file, binary_to_text, file_to_binary, text_to_binary
 
 default_delimiter = "[##MADOKA##]"
 

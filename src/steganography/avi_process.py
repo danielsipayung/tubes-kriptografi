@@ -1,13 +1,16 @@
 import cv2
 import os
+import shutil
 
-def extract_frames(base,video_path, frames_folder):
-    frame_folder_path = os.path.join(base,"avi_frames", frames_folder)
+def extract_frames(video_path, frames_folder):
+    frame_folder_path = os.path.join("src/steganography/","avi_frames", frames_folder)
+    abs_video_path = os.path.abspath(video_path)
     
-    if not os.path.exists(frame_folder_path):
-        os.makedirs(frame_folder_path)
+    if os.path.exists(frame_folder_path):
+        shutil.rmtree(frame_folder_path)
+    os.makedirs(frame_folder_path)
 
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture(abs_video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_count = 0
 

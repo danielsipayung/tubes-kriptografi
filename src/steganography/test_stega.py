@@ -38,7 +38,7 @@ while True:
 
     elif option == '3':
         test_folder_name = input("Enter frame folder name (in avi_frames/): ")
-        test_frames_path = os.path.join("avi_frames", test_folder_name)
+        test_frames_path = os.path.join(current_dir,"avi_frames", test_folder_name)
         
         if os.path.exists(test_frames_path):
             frame_order = get_frame_order(test_frames_path, sensitivity=30.0)
@@ -64,20 +64,20 @@ while True:
         print("2. Binary to File")
         option = input("Choose: ")
         if option == '1':
-            filepath = os.path.join("input", input("Enter file name with extension (in input/): "))
+            filepath = os.path.join(current_dir,"input", input("Enter file name with extension (in input/): "))
             binary_output = file_to_binary(filepath)
             
-            txt_filepath = os.path.join("binary_output", input("Enter the output file name with .txt: "))
+            txt_filepath = os.path.join(current_dir,"binary_output", input("Enter the output file name with .txt: "))
             with open(txt_filepath, 'w') as text_file:
                 text_file.write(binary_output)
             print(f"Binary saved to {txt_filepath}")
             
         elif option == '2':
-            txt_filepath = os.path.join("binary_output", input("Enter the text file name with .txt: "))
+            txt_filepath = os.path.join(current_dir,"binary_output", input("Enter the text file name with .txt: "))
             with open(txt_filepath, 'r') as text_file:
                 binary_input = text_file.read()
                 
-            filepath = os.path.join("output", input("Enter output file name with extension: "))
+            filepath = os.path.join(current_dir,"output", input("Enter output file name with extension: "))
             binary_to_file(binary_input, filepath)
             print(f"File saved to {filepath}")
 
@@ -107,7 +107,7 @@ while True:
 
     elif option == '8':
         test_folder_name = input("\nEnter frame folder name (in avi_frames/): ")
-        test_frames_path = os.path.join("avi_frames", test_folder_name)
+        test_frames_path = os.path.join(current_dir,"avi_frames", test_folder_name)
         
         if not os.path.exists(test_frames_path):
             print("Folder not found.")
@@ -125,7 +125,7 @@ while True:
                 is_file = False
             elif secret_type == 'f':
                 filename = input("Enter filename (in input/ folder): ")
-                data_to_embed = os.path.join("input", filename)
+                data_to_embed = os.path.join(current_dir,"input", filename)
                 is_file = True
             else:
                 print("Invalid choice.")
@@ -164,7 +164,7 @@ while True:
                     if save_name.strip() == "":
                         save_name = default_name
                         
-                    output_path = os.path.join("output", save_name)
+                    output_path = os.path.join(current_dir,"output", save_name)
                     binary_to_file(extracted_bits, output_path)
                     print(f"saved to {output_path}")
 

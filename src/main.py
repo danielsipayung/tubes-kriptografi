@@ -8,7 +8,7 @@ class App(tk.Tk):
 
         #config window
         super().__init__()
-        self.geometry("720x640")
+        self.geometry("720x620")
         self.resizable(False,False)
         self.title("Steganografi LSB")
 
@@ -33,9 +33,6 @@ class App(tk.Tk):
         self.rece_page.set_next_page(self.trans_page)
 
         self.button_mode.change_page(None, self.trans_page)
-
-
-
 
 
 if __name__ == "__main__":

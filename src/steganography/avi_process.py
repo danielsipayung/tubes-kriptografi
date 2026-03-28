@@ -28,8 +28,8 @@ def extract_frames(base,video_path, frames_folder):
     
     return fps
 
-def rebuild_video(frames_folder, output_video_path, fps):
-    frame_folder_path = os.path.join("avi_frames", frames_folder)
+def rebuild_video(base, frames_folder, output_video_path, fps):
+    frame_folder_path = os.path.join(base,"avi_frames", frames_folder)
     
     if not os.path.exists(frame_folder_path):
         print(f"Error: Folder '{frame_folder_path}' does not exist.")

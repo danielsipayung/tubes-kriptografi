@@ -20,9 +20,9 @@ while True:
     print("8. embed/extract")
     
     option = input("Choose: ")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
     if option == '1':
-        current_dir = os.path.dirname(os.path.abspath(__file__))
         video_path = os.path.join(current_dir,"avi_video", input("Enter avi video file name (e.g. test.avi): "))
         folder_name = input("Enter target folder name (will be created in /avi_frames): ")
         
@@ -33,8 +33,8 @@ while True:
 
     elif option == '2':
         folder_name = input("Enter the frame folder name inside /avi_frames to rebuild from: ")
-        output_path = os.path.join("output", input("Enter output video name (will be saved in /output): "))
-        rebuild_video(folder_name, output_path, current_fps)
+        output_path = os.path.join(current_dir,"output", input("Enter output video name (will be saved in /output): "))
+        rebuild_video(current_dir,folder_name, output_path, current_fps)
 
     elif option == '3':
         test_folder_name = input("Enter frame folder name (in avi_frames/): ")

@@ -43,7 +43,7 @@ def compare_videos_returns(path_original:str, path_stego:str)-> list[dict,list[l
         total_psnr += psnr
         frame_count += 1
 
-        if mse !=0 :
+        if mse !=0 : # this should not be a problem because there should not be many frames that are going to be different
             frame_out[0].append(frame_count)
             frame_out[1].append(frame_o)
             frame_out[2].append(frame_s)
@@ -51,7 +51,6 @@ def compare_videos_returns(path_original:str, path_stego:str)-> list[dict,list[l
 
 
     if frame_count > 0:
-        print("-" * 45)
         out["Mean MSE"] = total_mse / frame_count
         out["Mean PSNR"] = total_psnr / frame_count
 

@@ -65,8 +65,8 @@ def show_histograms(frames):
         for j, col in enumerate(colors):
             hist = cv2.calcHist([frames[1][i]], [j], None, [256], [0, 256])
             plt.plot(hist, color=col)
-        plt.ylabel("value")
-        plt.xlabel("pixels")
+        plt.ylabel("intensitas")
+        plt.xlabel("jumlah pixels")
         plt.xlim([0, 256])
         plt.grid(axis='y', alpha=0.3)
 
@@ -75,8 +75,8 @@ def show_histograms(frames):
         for j, col in enumerate(colors):
             hist = cv2.calcHist([frames[2][i]], [j], None, [256], [0, 256])
             plt.plot(hist, color=col)
-        plt.ylabel("value")
-        plt.xlabel("pixels")
+        plt.ylabel("intensitas")
+        plt.xlabel("jumlah pixels")
         plt.xlim([0, 256])
         plt.grid(axis='y', alpha=0.3)
 

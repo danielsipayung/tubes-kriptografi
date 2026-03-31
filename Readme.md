@@ -1,4 +1,4 @@
-## Tugas 2 II4021 Kriptografi - Steganografi LSB pada Berkas Video AVI ##
+# Tugas 2 II4021 Kriptografi - Steganografi LSB pada Berkas Video AVI #
 
 Program ini dibuat oleh:
 
@@ -11,7 +11,16 @@ Program ini dibuat oleh:
 Icons by Icons8
 
 
-Petunjuk: 
+### Guideline: ###
 
-Silahkan install requirements library agar program dapat berjalan dengan lancar
+- to run the program properly, please install all the requirement by run the command below
+
+```js
 pip install -r requirements.txt
+```
+
+
+- to run the program type/copy this line on the base directory (tubes-kriptografi)
+```js
+python src/main.py
+```

@@ -9,3 +9,9 @@ Program ini dibuat oleh:
 |18223082      |Mahesa Satria Prayata|
 
 Icons by Icons8
+
+
+Petunjuk: 
+
+Silahkan install requirements library agar program dapat berjalan dengan lancar
+pip install -r requirements.txt

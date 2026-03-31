@@ -13,6 +13,7 @@ Icons by Icons8
 
 ### Guideline: ###
 
+- Before running this program make sure python is installed in your system
 - to run the program properly, please install all the requirement by run the command below
 
 ```js

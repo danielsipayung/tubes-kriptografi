@@ -1,172 +1,225 @@
 import os
-import cv2
 
-from avi_process import extract_frames, rebuild_video
-from text_file_binary import text_to_binary, binary_to_text, file_to_binary, binary_to_file
-from steganography import split_byte_332, generate_header, get_frame_order, embed_secret, extract_secret, default_delimiter
+from avi_process import AviProcess, BASE_DIR
+from text_file_binary import BinaryConverter
+from steganography import Steganography
 
-# Global variable to hold fps in case the user extracts and then rebuilds immediately
-current_fps = 30.0 
+avi   = AviProcess()
+conv  = BinaryConverter()
+stega = Steganography()
+
+current_fps = 30.0
+
+
+def resolve_file(raw_input):
+    if os.path.isfile(raw_input):
+        return os.path.abspath(raw_input)
+    candidate = os.path.join(BASE_DIR, "input", raw_input)
+    if os.path.isfile(candidate):
+        return candidate
+    return None
+
+
+def looks_like_filename(text):
+    return '.' in text and ' ' not in text.strip()
+
 
 while True:
-    print("\nSteganography Test")
-    print("1. extract frames from AVI")
-    print("2. rebuild AVI from frames")
-    print("3. get frame insertion order")
-    print("4. text binary conversion")
-    print("5. file binary conversion")
-    print("6. 3-3-2 LSB Splitter ('k' as sample byte)")
-    print("7. header generation")
-    print("8. embed/extract")
-    
-    option = input("Choose: ")
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+    print("\n=== Steganography Test ===")
+    print("1. Extract frames from AVI")
+    print("2. Rebuild AVI from frames")
+    print("3. Get frame order")
+    print("4. Text <-> binary conversion")
+    print("5. File <-> binary conversion")
+    print("6. Test 3-3-2 LSB splitter")
+    print("7. Test header generation")
+    print("8. Embed / Extract message")
+    print("0. Exit")
 
-    if option == '1':
-        video_path = os.path.join(current_dir,"avi_video", input("Enter avi video file name (e.g. test.avi): "))
-        folder_name = input("Enter target folder name (will be created in /avi_frames): ")
-        
+    option = input("\nChoose: ").strip()
+
+    if option == '0':
+        break
+
+    elif option == '1':
+        video_name  = input("AVI filename (e.g. test.avi): ").strip()
+        video_path  = os.path.join(BASE_DIR, "avi_video", video_name)
+        folder_name = input("Target folder name (inside avi_frames/): ").strip()
+
         if os.path.exists(video_path):
-            current_fps = extract_frames(current_dir,video_path, folder_name)
+            current_fps = avi.extract_frames(video_path, folder_name)
         else:
-            print(f"Error: Could not find {video_path}")
+            print(f"Error: file not found -> {video_path}")
 
     elif option == '2':
-        folder_name = input("Enter the frame folder name inside /avi_frames to rebuild from: ")
-        output_path = os.path.join(current_dir,"output", input("Enter output video name (will be saved in /output): "))
-        rebuild_video(current_dir,folder_name, output_path, current_fps)
+        folder_name = input("Frames folder name (inside avi_frames/): ").strip()
+        output_name = input("Output filename (saved in output/, e.g. result.avi): ").strip()
+        output_path = os.path.join(BASE_DIR, "output", output_name)
+        os.makedirs(os.path.join(BASE_DIR, "output"), exist_ok=True)
+        avi.rebuild_video(folder_name, output_path, current_fps)
 
     elif option == '3':
-        test_folder_name = input("Enter frame folder name (in avi_frames/): ")
-        test_frames_path = os.path.join(current_dir,"avi_frames", test_folder_name)
-        
-        if os.path.exists(test_frames_path):
-            frame_order = get_frame_order(test_frames_path, sensitivity=30.0)
-            print(f"frame order: {frame_order}")
+        folder_name = input("Frames folder name (inside avi_frames/): ").strip()
+        frames_path = os.path.join(BASE_DIR, "avi_frames", folder_name)
+
+        if os.path.exists(frames_path):
+            frame_order  = stega.get_frame_order(frames_path, sensitivity=30.0)
+            sorted_order = stega.get_sorted_frame_order(frames_path)
+            print(f"Frame order (scene-change): {frame_order}")
+            print(f"Frame order (sorted)      : {sorted_order}")
         else:
-            print(f"Error: folder {test_frames_path} not found.")
+            print(f"Error: folder not found -> {frames_path}")
 
     elif option == '4':
-        print("1. Text to Binary")
-        print("2. Binary to Text")
-        option = input("Choose: ")
-        if option == '1':
-            input_text = input("Message to convert to binary: ")
-            binary_output = text_to_binary(input_text)
-            print(f"Binary: {binary_output}")
-        elif option == '2':
-            binary_input = input("Enter a binary string: ")
-            text_output = binary_to_text(binary_input)
-            print(f"Text: {text_output}")
+        print("1. Text -> Binary")
+        print("2. Binary -> Text")
+        sub = input("Choose: ").strip()
+        if sub == '1':
+            text = input("Enter text: ")
+            print(f"Binary: {conv.text_to_binary(text)}")
+        elif sub == '2':
+            binary = input("Enter binary string: ")
+            try:
+                print(f"Text: {conv.binary_to_text(binary)}")
+            except Exception as e:
+                print(f"Error: {e}")
 
     elif option == '5':
-        print("1. File to Binary")
-        print("2. Binary to File")
-        option = input("Choose: ")
-        if option == '1':
-            filepath = os.path.join(current_dir,"input", input("Enter file name with extension (in input/): "))
-            binary_output = file_to_binary(filepath)
-            
-            txt_filepath = os.path.join(current_dir,"binary_output", input("Enter the output file name with .txt: "))
-            with open(txt_filepath, 'w') as text_file:
-                text_file.write(binary_output)
-            print(f"Binary saved to {txt_filepath}")
-            
-        elif option == '2':
-            txt_filepath = os.path.join(current_dir,"binary_output", input("Enter the text file name with .txt: "))
-            with open(txt_filepath, 'r') as text_file:
-                binary_input = text_file.read()
-                
-            filepath = os.path.join(current_dir,"output", input("Enter output file name with extension: "))
-            binary_to_file(binary_input, filepath)
-            print(f"File saved to {filepath}")
+        print("1. File -> Binary (save to binary_output/)")
+        print("2. Binary -> File (read from binary_output/)")
+        sub = input("Choose: ").strip()
+        if sub == '1':
+            filename = input("Filename (inside input/): ").strip()
+            filepath = os.path.join(BASE_DIR, "input", filename)
+            out_name = input("Output .txt filename (in binary_output/): ").strip()
+            out_path = os.path.join(BASE_DIR, "binary_output", out_name)
+            os.makedirs(os.path.join(BASE_DIR, "binary_output"), exist_ok=True)
+            binary = conv.file_to_binary(filepath)
+            with open(out_path, 'w') as f:
+                f.write(binary)
+            print(f"Binary saved to {out_path}")
+        elif sub == '2':
+            txt_name = input("Binary .txt filename (in binary_output/): ").strip()
+            txt_path = os.path.join(BASE_DIR, "binary_output", txt_name)
+            with open(txt_path, 'r') as f:
+                binary = f.read()
+            out_name = input("Output filename (in output/): ").strip()
+            out_path = os.path.join(BASE_DIR, "output", out_name)
+            os.makedirs(os.path.join(BASE_DIR, "output"), exist_ok=True)
+            conv.binary_to_file(binary, out_path)
+            print(f"File saved to {out_path}")
 
     elif option == '6':
-        sample_byte = "01101011" # binary 'k'
-        r, g, b = split_byte_332(sample_byte)
-        
-        print(f"\nOriginal Byte: {sample_byte}")
-        print(f"Red bits (3)    : {r}")
-        print(f"Green bits (3)  : {g}")
-        print(f"Blue bits (2)   : {b}")
-        
-        if r == '011' and g == '010' and b == '11':
-            print("Status: Split successful")
-        else:    
-            print("Status: Split failed")
+        sample_byte = "01101011"  # 'k'
+        r, g, b = stega._split_byte_332(sample_byte)
+        print(f"\nOriginal byte : {sample_byte}")
+        print(f"R (3 bits)    : {r}")
+        print(f"G (3 bits)    : {g}")
+        print(f"B (2 bits)    : {b}")
+        status = "OK" if r == '011' and g == '010' and b == '11' else "FAILED"
+        print(f"Status        : {status}")
 
     elif option == '7':
-        test_payload = generate_header("madoka", is_file=False, is_random=False)
-        header_preview = binary_to_text(test_payload[:1500])
-        print(f"\nheader preview: {header_preview}")
-        
-        if default_delimiter in header_preview:
-            print("header generated")
-        else:
-            print("header failed to generate")
+        pass
 
     elif option == '8':
-        test_folder_name = input("\nEnter frame folder name (in avi_frames/): ")
-        test_frames_path = os.path.join(current_dir,"avi_frames", test_folder_name)
-        
-        if not os.path.exists(test_frames_path):
-            print("Folder not found.")
-            continue
-            
-        frame_order = get_frame_order(test_frames_path, sensitivity=30.0)
+        folder_name = input("\nFrames folder name (inside avi_frames/): ").strip()
+        frames_path = os.path.join(BASE_DIR, "avi_frames", folder_name)
 
-        action = input("embed/extract? (e/x): ").lower()
+        if not os.path.exists(frames_path):
+            print(f"Error: folder not found -> {frames_path}")
+            continue
+
+        frame_order = stega.get_sorted_frame_order(frames_path)
+        action      = input("embed / extract? (e/x): ").strip().lower()
 
         if action == 'e':
-            secret_type = input("Embed text or file? (t/f): ").lower()
-            
-            if secret_type == 't':
-                data_to_embed = input("Enter secret: ")
-                is_file = False
-            elif secret_type == 'f':
-                filename = input("Enter filename (in input/ folder): ")
-                data_to_embed = os.path.join(current_dir,"input", filename)
-                is_file = True
-            else:
-                print("Invalid choice.")
-                continue
+            raw      = input("File path or text message: ").strip()
+            resolved = resolve_file(raw)
 
-            embed_mode = input("Mode (seq/ran): ").lower()
-            if embed_mode == "seq":
-                test_seq = generate_header(data_to_embed, is_file, is_random=False)
-                embed_secret(test_seq, test_frames_path, frame_order, mode="sequential")
-            elif embed_mode == "ran":
-                key = input("Enter stego-key: ")
-                test_rand = generate_header(data_to_embed, is_file, is_random=True)
-                embed_secret(test_rand, test_frames_path, frame_order, mode="random", stego_key=key)
+            if resolved:
+                data_to_embed = resolved
+                is_file = True
+                print(f"[file] {data_to_embed}")
+            elif looks_like_filename(raw):
+                print(f"[!] '{raw}' looks like a filename but was not found.")
+                print(f"    Place the file in input/ or enter the full path.")
+                continue
+            else:
+                data_to_embed = raw
+                is_file = False
+                print(f"[text] '{data_to_embed}'")
+
+            embed_mode = input("Mode (seq/ran): ").strip().lower()
+            mode_map   = {"seq": "sequential", "ran": "random"}
+            mode       = mode_map.get(embed_mode, "sequential")
+            stego_key  = input("Stego-key: ").strip() if mode == "random" else None
+            is_random  = mode == "random"
+
+            try:
+                payload = stega.generate_header(data_to_embed, is_file, is_random)
+                stega.embed_secret(payload, frames_path, frame_order, mode=mode, stego_key=stego_key)
+
+                v_header = stega.peek_header(frames_path, frame_order, mode=mode, stego_key=stego_key)
+                if v_header:
+                    size_str = f"{v_header['file_size'] // 8} bytes"
+                    name_str = f", file: {v_header['filename']}" if v_header['file_type'] == 'file' else ""
+                    print(f"[OK] Verified: type={v_header['file_type']}, size={size_str}{name_str}")
+                else:
+                    print("[!] Verification failed - header unreadable after embed")
+            except ValueError as e:
+                print(f"Error: {e}")
 
         elif action == 'x':
-            extract_mode = input("Mode (seq/ran): ").lower()
-            
-            if extract_mode == "seq":
-                header, extracted_bits = extract_secret(test_frames_path, frame_order, mode="sequential")
-            elif extract_mode == "ran":
-                key = input("Enter stego-key: ")
-                header, extracted_bits = extract_secret(test_frames_path, frame_order, mode="random", stego_key=key)
-            else:
+            extract_mode = input("Mode (seq/ran): ").strip().lower()
+            mode_map     = {"seq": "sequential", "ran": "random"}
+            mode         = mode_map.get(extract_mode, "sequential")
+            stego_key    = input("Stego-key: ").strip() if mode == "random" else None
+
+            try:
+                header, extracted_bits = stega.extract_secret(
+                    frames_path, frame_order, mode=mode, stego_key=stego_key
+                )
+            except ValueError as e:
+                print(f"Error: {e}")
                 continue
 
-            if header:
-                if header["file_type"] == "text":
-                    secret_text = binary_to_text(extracted_bits)
-                    print(f"\nextracted message: {secret_text}")
-                    
-                elif header["file_type"] == "file":
-                    default_name = header["filename"]
-                    print(f"\nextracted filename: {default_name}")
-                    save_name = input(f"Save as (Enter to keep it as '{default_name}'): ")
-                    
-                    if save_name.strip() == "":
-                        save_name = default_name
-                        
-                    output_path = os.path.join(current_dir,"output", save_name)
-                    binary_to_file(extracted_bits, output_path)
-                    print(f"saved to {output_path}")
+            if not header:
+                continue
+
+            print(f"\n--- Header Info ---")
+            print(f"  Type : {header['file_type']}")
+            print(f"  Size : {header['file_size'] // 8} bytes")
+            if header['file_type'] == 'file':
+                print(f"  Name : {header['filename']}")
+            print(f"-------------------")
+
+            if header["file_type"] == "text":
+                text_result = conv.binary_to_text(extracted_bits)
+                print(f"Message: {text_result}")
+                if looks_like_filename(text_result):
+                    print(f"\n[!] Extracted text looks like a filename.")
+                    print(f"    The file was likely embedded as text, not as a file.")
+                    print(f"    Re-embed: place the file in input/ then run option 8 -> e")
+
+            elif header["file_type"] == "file":
+                default_name = header["filename"]
+                save_name    = input(f"Save as (Enter = '{default_name}'): ").strip()
+                if not save_name:
+                    save_name = default_name
+
+                output_dir  = os.path.join(BASE_DIR, "output")
+                os.makedirs(output_dir, exist_ok=True)
+                output_path = os.path.join(output_dir, save_name)
+
+                conv.binary_to_file(extracted_bits, output_path)
+
+                saved_size    = os.path.getsize(output_path)
+                expected_size = header['file_size'] // 8
+                if saved_size == expected_size:
+                    print(f"[OK] File saved: {output_path} ({saved_size} bytes)")
+                else:
+                    print(f"[!] Size mismatch: saved {saved_size} bytes, expected {expected_size} bytes")
 
     else:
-        print("invalid")
+        print("Invalid option.")

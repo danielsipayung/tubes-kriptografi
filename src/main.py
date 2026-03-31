@@ -8,7 +8,7 @@ class App(tk.Tk):
 
         #config window
         super().__init__()
-        self.geometry("720x620")
+        self.geometry("720x640")
         self.resizable(False,False)
         self.title("Steganografi LSB")
 
